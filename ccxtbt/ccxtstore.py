@@ -158,9 +158,14 @@ class CCXTStore(with_metaclass(MetaSingleton, object)):
     @retry
     def get_balance(self):
         balance = self.exchange.fetch_balance()
-
-        cash = balance['free'][self.currency]
-        value = balance['total'][self.currency]
+        try:
+            cash = balance['free'][self.currency] if balance['free'][self.currency] else 0
+        except KeyError:  # never funded or eg. all USD exchanged
+            cash = 0
+        try:
+            value = balance['total'][self.currency] if balance['total'][self.currency] else 0
+        except KeyError:  # never funded or eg. all USD exchanged
+            value = 0
         # Fix if None is returned
         self._cash = cash if cash else 0
         self._value = value if value else 0

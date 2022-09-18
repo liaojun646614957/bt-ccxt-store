@@ -213,9 +213,6 @@ class CCXTBroker(with_metaclass(MetaCCXTBroker, BrokerBase)):
                                         0, 0.0)
                         o_order.executed_fills.append(fill['id'])
 
-            if self.debug:
-                print(json.dumps(ccxt_order, indent=self.indent))
-
             # Check if the order is closed
             if ccxt_order[self.mappings['closed_order']['key']] == self.mappings['closed_order']['value']:
                 pos = self.getposition(o_order.data, clone=False)
@@ -234,10 +231,10 @@ class CCXTBroker(with_metaclass(MetaCCXTBroker, BrokerBase)):
 
     def _submit(self, owner, data, exectype, side, amount, price, params):
         if amount == 0 or price == 0:
-        # do not allow failing orders
+            # do not allow failing orders
             return None
         order_type = self.order_types.get(exectype) if exectype else 'market'
-        created = int(data.datetime.datetime(0).timestamp()*1000)
+        created = int(data.datetime.datetime(0).timestamp() * 1000)
         # Extract CCXT specific params if passed to the order
         params = params['params'] if 'params' in params else params
         if not self.use_order_params:
@@ -255,11 +252,13 @@ class CCXTBroker(with_metaclass(MetaCCXTBroker, BrokerBase)):
                 return None
 
         _order = self.store.fetch_order(ret_ord['id'], data.p.dataname)
-
+        if self.debug:
+            print('submit order,order info :', json.dumps(_order, indent=self.indent))
         order = CCXTOrder(owner, data, _order)
-        order.price = ret_ord['price']
+        order.price = _order['price'] if _order['price'] else 0
+        order.cost = _order['cost'] if _order['cost'] else 0
+        order.fee = _order['fee']['cost'] if _order['cost'] else 0
         self.open_orders.append(order)
-
         self.notify(order)
         return order
 
@@ -280,13 +279,9 @@ class CCXTBroker(with_metaclass(MetaCCXTBroker, BrokerBase)):
         return self._submit(owner, data, exectype, 'sell', size, price, kwargs)
 
     def cancel(self, order):
-
         oID = order.ccxt_order['id']
-
         if self.debug:
-            print('Broker cancel() called')
             print('Fetching Order ID: {}'.format(oID))
-
         # check first if the order has already been filled otherwise an error
         # might be raised if we try to cancel an order that is not open.
         ccxt_order = self.store.fetch_order(oID, order.data.p.dataname)
@@ -313,7 +308,7 @@ class CCXTBroker(with_metaclass(MetaCCXTBroker, BrokerBase)):
     def get_orders_open(self, safe=False):
         return self.store.fetch_open_orders()
 
-    def private_end_point(self, type, endpoint, params, prefix = ""):
+    def private_end_point(self, type, endpoint, params, prefix=""):
         '''
         Open method to allow calls to be made to any private end point.
         See here: https://github.com/ccxt/ccxt/wiki/Manual#implicit-api-methods
