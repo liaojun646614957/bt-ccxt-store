@@ -100,6 +100,9 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# params.json
+./exchanges/params.json
+
 # mypy
 .mypy_cache/
 samples/params.json

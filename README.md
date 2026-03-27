@@ -5,6 +5,18 @@ I have been working on.
 Some additions have been made to this repo that I find useful. Your mileage may
 vary.
 
+## 快速开始
+
+### 安装
+
+```bash
+python install.py
+```
+
+详细安装说明请查看 [INSTALL.md](INSTALL.md)
+
+### 运行示例
+
 Check out the example script to see how to setup and run on Kraken.
 
 

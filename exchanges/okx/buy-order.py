@@ -127,7 +127,6 @@ cerebro.addstrategy(TestStrategy)
 config = {'apiKey': params["okx"]["apikey"],
           'secret': params["okx"]["secret"],
           'password': params["okx"]["password"],
-          'proxies': {'https': 'http://127.0.0.1:7890', 'http': 'http://127.0.0.1:7890'},
           'enableRateLimit': True,
           }
 

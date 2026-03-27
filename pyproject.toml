@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bt-ccxt-store"
+version = "1.0"
+description = "A fork of Ed Bartosh's CCXT Store Work with some additions"
+readme = "README.md"
+requires-python = ">=3.6"
+license = {text = "MIT"}
+authors = [
+    {name = "Dave Vallance", email = "dave@backtest-rookies.com"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "backtrader",
+    "ccxt",
+]
+keywords = ["backtrader", "ccxt", "trading", "cryptocurrency", "exchange"]
+
+[project.urls]
+Homepage = "https://github.com/Dave-Vallance/bt-ccxt-store"
+Repository = "https://github.com/Dave-Vallance/bt-ccxt-store"
+
+[tool.setuptools]
+packages = ["ccxtbt"]
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.md", "*.json"]
+
